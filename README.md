@@ -57,6 +57,6 @@ socat udp-listen:4003 udp4:169.57.153.181:2000&
 ./udpserver 6666&
 
 # any machine
-./udpclient 4000
+./udpclient 169.57.153.183 4000
 ```
 
