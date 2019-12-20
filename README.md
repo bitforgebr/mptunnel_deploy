@@ -33,18 +33,16 @@ Este caso de uso contém quatro máquinas, todas locais, com os IPs 169.57.153.1
 ```
                                .------ 180:socat ------.
                               /                         \
- *:udpclient --- 183:mpclient -------- 183:socat ------- 181:mpserver --- 181:udpserver
+ x:udpclient --- x:mpclient   -------- 183:socat ------- 181:mpserver --- 181:udpserver
                               \                         /
                                `------ 179:socat ------`
 
-# 169.57.153.183 (poc_brasil_localhost_183.sh)
-./mpclient 4000 client_poc_brasil_localhost.conf&
-socat udp-listen:4001 udp4:169.57.153.181:2000&
+# 169.57.153.181 (poc_brasil_localhost_181.sh)
+./mpserver 2000 localhost 6666&
+./udpserver 6666&
 
-# client_poc_brasil_localhost.conf
-169.57.153.183 4001
-169.57.153.180 4002
-169.57.153.179 4003
+# 169.57.153.183 (poc_brasil_localhost_183.sh)
+socat udp-listen:4001 udp4:169.57.153.181:2000&
 
 # 169.57.153.180 (poc_brasil_localhost_180.sh)
 socat udp-listen:4002 udp4:169.57.153.181:2000&
@@ -52,11 +50,13 @@ socat udp-listen:4002 udp4:169.57.153.181:2000&
 # 169.57.153.179 (poc_brasil_localhost_179.sh)
 socat udp-listen:4003 udp4:169.57.153.181:2000&
 
-# 169.57.153.181 (poc_brasil_localhost_181.sh)
-./mpserver 2000 localhost 6666&
-./udpserver 6666&
+rem client machine
+start mpclient 4000 client_poc_brasil_localhost.conf
+udpclient localhost 4000
 
-# any machine
-./udpclient 169.57.153.183 4000
+# client_poc_brasil_localhost.conf
+169.57.153.183 4001
+169.57.153.180 4002
+169.57.153.179 4003
 ```
 
